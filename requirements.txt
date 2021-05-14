@@ -1,0 +1,6 @@
+email==4.0.2
+smtplib==0.1.1
+datetime==4.3
+os==0.1
+schedule==1.1.0
+time==0.7
