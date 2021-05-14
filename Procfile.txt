@@ -1,1 +1,1 @@
-web: python dot.py
+Web: python dot.py
