@@ -1,6 +1,9 @@
 import email
 import smtplib
 from datetime import datetime
+import os
+import schedule
+import time
 
 import requests
 
@@ -32,13 +35,13 @@ def get_for_seven_days(start_date):
 def create_output(session_info):
     return f"{session_info['date']} - {session_info['name']} ({session_info['capacity']})"
 
-if __name__ == "__main__":
+def start():
     print(get_for_seven_days(datetime.today()))
     content = "\n".join([create_output(session_info) for session_info in get_for_seven_days(datetime.today())])
-    username = USR
-    password = PASS
+    username = os.environ.get('usr')
+    password = os.environ.get('pass')
     # Try a loop to get emails from table and send the notifications back
-    to = TO
+    to = os.environ.get('to')
 
     if not content:
         print("No availability")
@@ -54,3 +57,12 @@ if __name__ == "__main__":
             server.login(username, password)
             server.send_message(email_msg)
             server.quit()
+
+if __name__ == "__main__":
+    schedule.every(30).seconds.do(start)
+
+    while True:
+        # Checks whether a scheduled task
+        # is pending to run or not
+        schedule.run_pending()
+        time.sleep(1)
